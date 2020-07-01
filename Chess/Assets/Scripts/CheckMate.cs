@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//This Script checks if any movement is possible by any chesspiece of the opponent
+//If any movement is possible i.e. count>0 for any gamepiece of the opponent then it returns false
+//If not then it return true and game ends with the current players win
 public class CheckMate : MonoBehaviour
 {
     public GameController1 controller;

@@ -35,6 +35,7 @@ public class Rewind : MonoBehaviour
 
     public void Update()
     {
+        //If rewind is not done and rewind button is pressed
         if(startTimer)
         {
             completeTurnButtonObject.SetActive(true);
@@ -66,6 +67,7 @@ public class Rewind : MonoBehaviour
                 displayText.color = Color.red;
             }
         }
+        //Moves back the chesspiece to its previous position
         if (move)
         {
             if (rewindChessPiece.transform.position != endPosition)
@@ -86,6 +88,7 @@ public class Rewind : MonoBehaviour
                 move = false;
             }
         }
+        //For Rook,if castling is done this turn then it is activated
         if (castling)
         {
             if (castlingRook.transform.position != endPositionCastling)
@@ -102,12 +105,14 @@ public class Rewind : MonoBehaviour
 
     public void RewindGame()
     {
+        //If no movement is done this turn and the rewind button is pressed
         if (!startTimer && !rewindDone)
         {
             rewindStatusPanel.SetActive(true);
             rewindStatusText.text = "Rewind is Off.\nNo Movement done this turn.";
             StartCoroutine(RewindStatusWait());
         }
+        //When movement is done and rewind button is pressed before time expires
         if (time > 0 && startTimer)
         {
             startTimer = false;
@@ -125,6 +130,7 @@ public class Rewind : MonoBehaviour
             else if (type == "Castling")
                 CastingRewind();
         }
+        //If rewind is pressed after rewinding once
         if (rewindDone)
         {
             rewindStatusPanel.SetActive(true);
@@ -141,8 +147,8 @@ public class Rewind : MonoBehaviour
 
     private void SummoningRewind()
     {
-        Destroy(GameObject.Find(controller.chessBoardMatrix[x2Position, y2Position]));
-        if(x2y2Name!="")
+        Destroy(GameObject.Find(controller.chessBoardMatrix[x2Position, y2Position]));//Destroying summoned gameobject
+        if(x2y2Name!="")//If killed and then summoned
             chessPiecesParentObject.transform.Find(x2y2Name).gameObject.SetActive(true);
         rewindChessPiece = chessPiecesParentObject.transform.Find(x1y1Name).gameObject;
         rewindChessPiece.SetActive(true);
@@ -151,6 +157,7 @@ public class Rewind : MonoBehaviour
         movementSpeed = Vector3.Distance(rewindChessPiece.transform.position, ob.transform.position) * 2f;
         endPosition = ob.transform.position;
         move = true;
+        //Restoring the changes made to the variables
         controller.pawnFirstMove = new Dictionary<string, int>(copyOfPawnFirstMove);
         controller.movedOrNot = new Dictionary<string, bool>(copyOfMovedOrNot);
         controller.chessBoardMatrix[x1Position, y1Position] = x1y1Name;
@@ -173,6 +180,7 @@ public class Rewind : MonoBehaviour
         endPositionCastling = ob1.transform.position;
         move = true;
         castling = true;
+        //Restoring the changes made to the variables
         controller.pawnFirstMove = new Dictionary<string, int>(copyOfPawnFirstMove);
         controller.movedOrNot = new Dictionary<string, bool>(copyOfMovedOrNot);
         controller.chessBoardMatrix[x1Position, y1Position] = x1y1Name;
@@ -190,6 +198,7 @@ public class Rewind : MonoBehaviour
         endPosition = ob.transform.position;
         chessPiecesParentObject.transform.Find(x3y3Name).gameObject.SetActive(true);
         move = true;
+        //Restoring the changes made to the variables
         controller.pawnFirstMove = new Dictionary<string, int>(copyOfPawnFirstMove);
         controller.movedOrNot = new Dictionary<string, bool>(copyOfMovedOrNot);
         controller.chessBoardMatrix[x1Position, y1Position] = x1y1Name;
@@ -206,6 +215,7 @@ public class Rewind : MonoBehaviour
         endPosition = ob.transform.position;
         chessPiecesParentObject.transform.Find(x2y2Name).gameObject.SetActive(true);
         move = true;
+        //Restoring the changes made to the variables
         controller.pawnFirstMove = new Dictionary<string, int>(copyOfPawnFirstMove);
         controller.movedOrNot = new Dictionary<string, bool>(copyOfMovedOrNot);
         controller.chessBoardMatrix[x1Position, y1Position] = x1y1Name;
@@ -220,12 +230,14 @@ public class Rewind : MonoBehaviour
         movementSpeed = Vector3.Distance(rewindChessPiece.transform.position, ob.transform.position) * 2f;
         endPosition = ob.transform.position;
         move = true;
+        //Restoring the changes made to the variables
         controller.pawnFirstMove = new Dictionary<string, int>(copyOfPawnFirstMove);
         controller.movedOrNot = new Dictionary<string, bool>(copyOfMovedOrNot);
         controller.chessBoardMatrix[x1Position, y1Position] = x1y1Name;
         controller.chessBoardMatrix[x2Position, y2Position] = x2y2Name;
     }
 
+    //storing the variables values before the movement
     internal void StoreValues(int x, int y, int a, int b, bool turn, string typeName, string v1, string v2, Dictionary<string, int> pawnFirstMove, Dictionary<string, bool> movedOrNot)
     {
         x1Position = x;
@@ -238,16 +250,9 @@ public class Rewind : MonoBehaviour
         x2y2Name = v2;
         copyOfPawnFirstMove = new Dictionary<string, int>(pawnFirstMove);
         copyOfMovedOrNot = new Dictionary<string, bool>(movedOrNot);
-        foreach (KeyValuePair<string, int> kvp in copyOfPawnFirstMove)
-        {
-            Debug.Log(kvp.Key + " : " + kvp.Value);
-        }
-        foreach (KeyValuePair<string, bool> kvp in copyOfMovedOrNot)
-        {
-            Debug.Log(kvp.Key + " : " + kvp.Value);
-        }
     }
 
+    //storing extra variable values if movement is Castling or Enpassant
     internal void StoreExtraValues(int x, int y, int a, int b, string v1, string v2)
     {
         x3Position = x;
@@ -258,6 +263,7 @@ public class Rewind : MonoBehaviour
         x4y4Name = v2;
     }
 
+    //Skips the timer and completes your turn.Called on OnClick()
     public void CompleteTurn()
     {
         startTimer = false;

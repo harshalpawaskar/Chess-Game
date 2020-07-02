@@ -22,7 +22,7 @@ public class CheckMate : MonoBehaviour
         {
             for(int j=0;j<8;j++)
             {
-                if(copy[i,j].Contains("W ") && turn)
+                if(copy[i,j].Contains("W ") && turn)//WHITE
                 {
                     if(copy[i,j].Contains("W Pawn"))
                     {
@@ -71,7 +71,7 @@ public class CheckMate : MonoBehaviour
                             return false;
                     }
                 }
-                else if(copy[i, j].Contains("B ") && !turn)
+                else if(copy[i, j].Contains("B ") && !turn)//BLACK
                 {
                     if (copy[i, j].Contains("B Pawn"))
                     {
@@ -122,7 +122,6 @@ public class CheckMate : MonoBehaviour
                 }
             }
         }
-
         return true;
     }
 }

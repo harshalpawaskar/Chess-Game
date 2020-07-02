@@ -10,10 +10,9 @@ public class InGameMenu : MonoBehaviour
     public GameObject volumeOff;
     public AudioSource moveAudio;
     public GameController1 controller;
-    public GameObject onButton, OffButton;
-    //public GameObject[] UIPanels;
+    public GameObject helperOnButton, helperOffButton;
 
-    public void Awake()
+    public void Awake()//Setting the Volume and Helper based on the PlayerPrefs values stored.
     {
         if(PlayerPrefs.GetString("Volume") == "ON")
         {
@@ -27,48 +26,39 @@ public class InGameMenu : MonoBehaviour
         }
         if(PlayerPrefs.GetString("Helper") == "ON")
         {
-            Color color = onButton.GetComponent<UnityEngine.UI.Image>().color;
+            Color color = helperOnButton.GetComponent<UnityEngine.UI.Image>().color;
             color.a = 1f;
-            onButton.GetComponent<UnityEngine.UI.Image>().color = color;
-            color = OffButton.GetComponent<UnityEngine.UI.Image>().color;
+            helperOnButton.GetComponent<UnityEngine.UI.Image>().color = color;
+            color = helperOffButton.GetComponent<UnityEngine.UI.Image>().color;
             color.a = 0.4f;
-            OffButton.GetComponent<UnityEngine.UI.Image>().color = color;
+            helperOffButton.GetComponent<UnityEngine.UI.Image>().color = color;
         }
         if (PlayerPrefs.GetString("Helper") == "OFF")
         {
-            Color color = OffButton.GetComponent<UnityEngine.UI.Image>().color;
+            Color color = helperOffButton.GetComponent<UnityEngine.UI.Image>().color;
             color.a = 1f;
-            OffButton.GetComponent<UnityEngine.UI.Image>().color = color;
-            color = onButton.GetComponent<UnityEngine.UI.Image>().color;
+            helperOffButton.GetComponent<UnityEngine.UI.Image>().color = color;
+            color = helperOnButton.GetComponent<UnityEngine.UI.Image>().color;
             color.a = 0.4f;
-            onButton.GetComponent<UnityEngine.UI.Image>().color = color;
+            helperOnButton.GetComponent<UnityEngine.UI.Image>().color = color;
         }
     }
 
-    public void Update()
-    {
-        //foreach (GameObject i in UIPanels)
-        //{
-        //    if (i.activeSelf)
-        //    {
-      //          controller.touchEnabled = false;
-      //          break;
-      //      }
-      //  }
-    }
-
+    //Go back to main menu.Called onClick()
     public void GoToMainMenu()
     {
         Time.timeScale = 1f;
         SceneManager.LoadScene(0);
     }
 
+    //Restart the current game level.Called onClick()
     public void RestartGame()
     {
         Time.timeScale = 1f;
         SceneManager.LoadScene(1);
     }
 
+    //Turn ON and OFF the Volume.Called onClick()
     public void Volume()
     {
         if(PlayerPrefs.GetString("Volume")=="ON")
@@ -83,14 +73,15 @@ public class InGameMenu : MonoBehaviour
         }
     }
 
+    //Turns ON the Helper.Called onClick()
     public void TurnOnHelper()
     {
-        Color color = onButton.GetComponent<UnityEngine.UI.Image>().color;
+        Color color = helperOnButton.GetComponent<UnityEngine.UI.Image>().color;
         color.a = 1f;
-        onButton.GetComponent<UnityEngine.UI.Image>().color = color;
-        color = OffButton.GetComponent<UnityEngine.UI.Image>().color;
+        helperOnButton.GetComponent<UnityEngine.UI.Image>().color = color;
+        color = helperOffButton.GetComponent<UnityEngine.UI.Image>().color;
         color.a = 0.4f;
-        OffButton.GetComponent<UnityEngine.UI.Image>().color = color;
+        helperOffButton.GetComponent<UnityEngine.UI.Image>().color = color;
         PlayerPrefs.SetString("Helper", "ON");
         controller.helper = true;
         foreach (string i in controller.activatedPlanesNames)
@@ -99,14 +90,15 @@ public class InGameMenu : MonoBehaviour
         }
     }
 
+    //Turns OFF the Helper.Called onClick()
     public void TurnOffHelper()
     {
-        Color color = OffButton.GetComponent<UnityEngine.UI.Image>().color;
+        Color color = helperOffButton.GetComponent<UnityEngine.UI.Image>().color;
         color.a = 1f;
-        OffButton.GetComponent<UnityEngine.UI.Image>().color = color;
-        color = onButton.GetComponent<UnityEngine.UI.Image>().color;
+        helperOffButton.GetComponent<UnityEngine.UI.Image>().color = color;
+        color = helperOnButton.GetComponent<UnityEngine.UI.Image>().color;
         color.a = 0.4f;
-        onButton.GetComponent<UnityEngine.UI.Image>().color = color;
+        helperOnButton.GetComponent<UnityEngine.UI.Image>().color = color;
         PlayerPrefs.SetString("Helper", "OFF");
         controller.helper = false;
         color = new Color(0.137f, 0.737f, 1f, 1f);
@@ -117,16 +109,19 @@ public class InGameMenu : MonoBehaviour
         }
     }
 
+    //Sets the controller.selected to false.Called onClick()
     public void DeactivateSelected()
     {
         controller.selected = false;
     }
 
+    //Stops the Time.Called onClick()
     public void StopTime()
     {
         Time.timeScale = 0f;
     }
 
+    //Resumes the Time.Called onClick()
     public void ResumeTime()
     {
         Time.timeScale = 1f;

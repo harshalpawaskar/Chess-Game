@@ -3,14 +3,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//This script is called when Knight is selected
+//All the possible movements are checked and those movements are activated i.e the highlighplanes if only if the CheckOrNot returns false
+//If CheckOrNot returns true then that plane is activated
 public class KnightMovement : MonoBehaviour
 {
     public GameController1 controller;
-    public string[,] copy = new string[8, 8];
+    public string[,] copy = new string[8, 8];//copy of chessBoardMatrix
     public Check check;
     string name1;
     string name2;
     int count;
+
     public void ActivatePlanes(int x, int y)
     {
         count = 0;
@@ -26,9 +30,11 @@ public class KnightMovement : MonoBehaviour
             }
         }
         name1 = copy[x, y];
-        if(x-2>=0)//UP
+        #region UP
+        if (x-2>=0)
         {
-            if(y+1<=7)//UP-RIGHT
+            #region UP-RIGHT
+            if (y+1<=7)
             {
                 if (controller.chessBoardMatrix[x - 2, y + 1] == "")
                 {
@@ -79,7 +85,9 @@ public class KnightMovement : MonoBehaviour
                     copy[x - 2, y + 1] = name2;
                 }
             }
-            if(y-1>=0)//UP-LEFT
+            #endregion
+            #region UP-LEFT
+            if (y-1>=0)
             {
                 if (controller.chessBoardMatrix[x - 2, y - 1] == "")
                 {
@@ -130,10 +138,14 @@ public class KnightMovement : MonoBehaviour
                     copy[x - 2, y - 1] = name2;
                 }
             }
+            #endregion
         }
-        if(x+2<=7)//DOWN
+        #endregion
+        #region DOWN
+        if (x+2<=7)
         {
-            if(y+1<=7)//DOWN-RIGHT
+            #region DOWN-RIGHT
+            if (y+1<=7)
             {
                 if (controller.chessBoardMatrix[x + 2, y + 1] == "")
                 {
@@ -184,7 +196,9 @@ public class KnightMovement : MonoBehaviour
                     copy[x + 2, y + 1] = name2;
                 }
             }
-            if(y-1>=0)//DOWN-LEFT
+            #endregion
+            #region DOWN-LEFT
+            if (y-1>=0)
             {
                 if (controller.chessBoardMatrix[x + 2, y - 1] == "")
                 {
@@ -235,10 +249,14 @@ public class KnightMovement : MonoBehaviour
                     copy[x + 2, y - 1] = name2;
                 }
             }
+            #endregion
         }
-        if(y-2>=0)//LEFT
+        #endregion
+        #region LEFT
+        if (y-2>=0)
         {
-            if(x+1<=7)//LEFT-DOWN
+            #region LEFT-DOWN
+            if (x+1<=7)
             {
                 if (controller.chessBoardMatrix[x + 1, y - 2] == "")
                 {
@@ -289,7 +307,9 @@ public class KnightMovement : MonoBehaviour
                     copy[x + 1, y - 2] = name2;
                 }
             }
-            if(x-1>=0)//LEFT-UP
+            #endregion
+            #region LEFT-UP
+            if (x-1>=0)
             {
                 if (controller.chessBoardMatrix[x - 1, y - 2] == "")
                 {
@@ -340,10 +360,14 @@ public class KnightMovement : MonoBehaviour
                     copy[x - 1, y - 2] = name2;
                 }
             }
+            #endregion
         }
-        if(y+2<=7)//RIGHT
+        #endregion
+        #region RIGHT
+        if (y+2<=7)
         {
-            if(x+1<=7)//RIGHT-DOWN
+            #region RIGHT-DOWN
+            if (x+1<=7)
             {
                 if (controller.chessBoardMatrix[x + 1, y + 2] == "")
                 {
@@ -394,7 +418,9 @@ public class KnightMovement : MonoBehaviour
                     copy[x + 1, y + 2] = name2;
                 }
             }
-            if(x-1>=0)//RIGHT-UP
+            #endregion
+            #region RIGHT-UP
+            if (x-1>=0)
             {
                 if (controller.chessBoardMatrix[x - 1, y + 2] == "")
                 {
@@ -445,8 +471,12 @@ public class KnightMovement : MonoBehaviour
                     copy[x - 1, y + 2] = name2;
                 }
             }
+            #endregion
         }
+        #endregion
     }
+
+    //Counts no. of activated planes.This function is called by Checkmate Script
     internal int getCount(int i, int j)
     {
         ActivatePlanes(i, j);

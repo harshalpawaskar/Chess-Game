@@ -82,6 +82,7 @@ public class GameController1 : MonoBehaviour
 
     void Update()
     {
+        //Movement of the Selected ChessPiece
         if (move)
         {
             if (hit2.transform.position != endPosition)
@@ -93,14 +94,14 @@ public class GameController1 : MonoBehaviour
                 GameObject.Find(hit2.collider.name).GetComponent<BoxCollider>().enabled = true;
                 move = false;
                 chk();
-                if(!rewind.rewindDone)
+                if(!rewind.rewindDoneOnce)//rewind not done once this turn
                 {
                     rewind.time = 5;
                     Color color = new Color(0.0352f, 0.2823f, 0.0156f, 1f);
                     rewind.displayText.color = color;
                     rewind.startTimer = true;
                 }
-                if(rewind.rewindDone)
+                if(rewind.rewindDoneOnce)//rewind is done once this turn
                 {
                     if (hit2.collider.name.Contains("W "))
                     {
@@ -110,10 +111,11 @@ public class GameController1 : MonoBehaviour
                     {
                         StartCoroutine(Coroutine2());
                     }
-                    rewind.rewindDone = false;
+                    rewind.rewindDoneOnce = false;
                 }
             }
         }
+        //Rook's Castling Movement
         if (castling)
         {
             if (castlingRook.transform.position != endPositionCastling)
@@ -190,9 +192,9 @@ public class GameController1 : MonoBehaviour
                 }
                 else if(selected)
                 {
-                    if (turn)
+                    if (turn)//White's Turn
                     {
-                        if (hit.transform.gameObject.layer == LayerMask.NameToLayer("HightlightPlane"))
+                        if (hit.transform.gameObject.layer == LayerMask.NameToLayer("HightlightPlane"))//Normal Movement Selected
                         {
                             var ob = hit.transform.GetComponent<MeshRenderer>().material.color;
                             if (hit.collider.name != highLightTilesMatrix[x, y] && (ob == Color.green || ob == Color.red || ob == Color.yellow))
@@ -213,7 +215,7 @@ public class GameController1 : MonoBehaviour
                                 turn = false;
                                 selected = false;
                             }
-                            if (ob != Color.green && ob != Color.red && ob != Color.blue && ob != Color.yellow)
+                            if (ob != Color.green && ob != Color.red && ob != Color.blue && ob != Color.yellow)//If clicked somewhere else
                             {
                                 DeactivateExistingPlanes();
                                 chk();
@@ -225,7 +227,7 @@ public class GameController1 : MonoBehaviour
                                 }
                             }
                         }
-                        if(hit.transform.gameObject.layer == LayerMask.NameToLayer("Black"))
+                        if(hit.transform.gameObject.layer == LayerMask.NameToLayer("Black"))//Killing Movement Selected
                         {
                             GetPosition();
                             if (GameObject.Find(highLightTilesMatrix[x, y]).GetComponent<MeshRenderer>().material.color == Color.red)
@@ -246,7 +248,7 @@ public class GameController1 : MonoBehaviour
                                 turn = false;
                                 selected = false;
                             }
-                            else
+                            else//If clicked somewhere else
                             {
                                 DeactivateExistingPlanes();
                                 chk();
@@ -259,9 +261,9 @@ public class GameController1 : MonoBehaviour
                             }
                         }
                     }
-                    else
+                    else//Black's Turn
                     {
-                        if (hit.transform.gameObject.layer == LayerMask.NameToLayer("HightlightPlane"))
+                        if (hit.transform.gameObject.layer == LayerMask.NameToLayer("HightlightPlane"))//Normal Movement Selected
                         {
                             var ob = hit.transform.GetComponent<MeshRenderer>().material.color;
                             if (hit.collider.name != highLightTilesMatrix[x, y] && (ob == Color.green || ob == Color.red || ob == Color.yellow))
@@ -282,7 +284,7 @@ public class GameController1 : MonoBehaviour
                                 turn = true;
                                 selected = false;
                             }
-                            if (ob != Color.green && ob != Color.red && ob != Color.blue && ob != Color.yellow)
+                            if (ob != Color.green && ob != Color.red && ob != Color.blue && ob != Color.yellow)//If clicked somewhere else
                             {
                                 DeactivateExistingPlanes();
                                 chk();
@@ -294,7 +296,7 @@ public class GameController1 : MonoBehaviour
                                 }
                             }
                         }
-                        if (hit.transform.gameObject.layer == LayerMask.NameToLayer("White"))
+                        if (hit.transform.gameObject.layer == LayerMask.NameToLayer("White"))//Killing Movement Selected
                         {
                             GetPosition();
                             if (GameObject.Find(highLightTilesMatrix[x, y]).GetComponent<MeshRenderer>().material.color == Color.red)
@@ -315,7 +317,7 @@ public class GameController1 : MonoBehaviour
                                 turn = true;
                                 selected = false;
                             }
-                            else
+                            else//If clicked somewhere else
                             {
                                 DeactivateExistingPlanes();
                                 chk();
@@ -333,6 +335,7 @@ public class GameController1 : MonoBehaviour
         }
     }
 
+    //Turn the Chessboard fo Black's Turn
     IEnumerator Coroutine1()
     {
         yield return new WaitForSeconds(0.5f);
@@ -341,6 +344,7 @@ public class GameController1 : MonoBehaviour
         touchEnabled = true;
     }
 
+    //Turn the chessBoard for White's Turn 
     IEnumerator Coroutine2()
     {
         yield return new WaitForSeconds(0.5f);
@@ -349,26 +353,26 @@ public class GameController1 : MonoBehaviour
         touchEnabled = true;
     }
 
+    //Deactivate invalidText after some Time
     IEnumerator InvalidTextWait()
     {
         yield return new WaitForSeconds(1f);
         invalidTextObject.SetActive(false);
     }
 
+    //checking if check is been given,if yes then check if checkmate or not
     public void chk()
     {
-        if (turn)
+        if (turn)//White
         {
             if (check.CheckOrNot(chessBoardMatrix, turn))
             {
-                //Debug.Log("Entered Check True");
                 for (int i = 0; i < 8; i++)
                 {
                     for (int j = 0; j < 8; j++)
                     {
                         if (chessBoardMatrix[i, j] == "W King")
                         {
-                            //Debug.Log("Entered 1");
                             Debug.Log(highLightTilesMatrix[i, j]);
                             checki = i;
                             checkj = j;
@@ -392,18 +396,16 @@ public class GameController1 : MonoBehaviour
                 GameObject.Find(highLightTilesMatrix[checki, checkj]).GetComponent<MeshRenderer>().material.color = Color.red;
             }
         }
-        else
+        else//Black 
         {
             if (check.CheckOrNot(chessBoardMatrix, turn))
             {
-                //Debug.Log("Entered Check True");
                 for (int i = 0; i < 8; i++)
                 {
                     for (int j = 0; j < 8; j++)
                     {
                         if (chessBoardMatrix[i, j] == "B King")
                         {
-                            //Debug.Log("Entered 1");
                             Debug.Log(highLightTilesMatrix[i, j]);
                             checki = i;
                             checkj = j;
@@ -429,7 +431,7 @@ public class GameController1 : MonoBehaviour
         }
     }
 
-    IEnumerator Wait3(bool turn1)
+    IEnumerator Wait3(bool turn1)//Activates result panel after waiting for some time
     {
         yield return new WaitForSeconds(0.5f);
         if (turn1)
@@ -438,6 +440,7 @@ public class GameController1 : MonoBehaviour
             result.DisplayResult(true);
     }
 
+    //Calls the movement function depending on the type of chess piece selected
     private void MoveSelected()
     {
         if (hit1.collider.CompareTag("Knight"))
@@ -468,7 +471,7 @@ public class GameController1 : MonoBehaviour
 
     public void ChangeValues()//change the values in chessBoardMatrix if hit is HighLightTile
     {
-        string name1 = chessBoardMatrix[x, y];//x,y is Chesspiece position
+        string name1 = chessBoardMatrix[x, y];//x,y is Chesspiece position(hit1)
         chessBoardMatrix[x, y] = "";
         for (int i = 0; i < 8; i++)
         {
@@ -485,7 +488,7 @@ public class GameController1 : MonoBehaviour
         chessBoardMatrix[x, y] = name1;
     }
 
-    public void HighLightTilesPosition(RaycastHit hit2, ref int a,ref int b)//selected tile position
+    public void HighLightTilesPosition(RaycastHit hit2, ref int a,ref int b)//selected HighLightTile position
     {
         for (int i = 0; i < 8; i++)
         {
@@ -501,6 +504,7 @@ public class GameController1 : MonoBehaviour
         }
     }
 
+    //Deactivates existing activated planes
     public void DeactivateExistingPlanes()
     {
         foreach (string i in activatedPlanesNames)
@@ -511,6 +515,7 @@ public class GameController1 : MonoBehaviour
         activatedPlanesNames.Clear();
     }
 
+    //Calling activate plane depending on the type of chesspiece
     private void ActivatePlanes()
     {
         if(hit.collider.CompareTag("Knight"))
@@ -539,7 +544,7 @@ public class GameController1 : MonoBehaviour
         }
     }
 
-    private void GetPosition()//selected chesspiece position
+    private void GetPosition()//selected hit variable position
     {
         for (int i = 0; i < 8; i++)
         {
@@ -556,14 +561,16 @@ public class GameController1 : MonoBehaviour
     }
 
 
-    //Move function for Knight,Bishop,Rook and Queen
+    //Movement function to store the movement values and Invoke the Update function to start the movement For Knight,Bishop,Rook,King and Queen
     private void Move(RaycastHit hit, RaycastHit hit1, int x, int y)
     {
         int a = 0, b = 0;
         HighLightTilesPosition(hit, ref a, ref b);
+        #region HighLight Plane is Selected/hit to Move your ChessPiece
+        //Here x,y is source position and a,b is destination position and hit variable is HighLight Plane
         if (hit.transform.gameObject.layer == LayerMask.NameToLayer("HightlightPlane"))
         {
-            if (hit.transform.GetComponent<MeshRenderer>().material.color == Color.green)
+            if (hit.transform.GetComponent<MeshRenderer>().material.color == Color.green)//Normal Movement
             {
                 GameObject.Find(hit1.collider.name).GetComponent<BoxCollider>().enabled = false;
                 hit2 = hit1;
@@ -573,7 +580,7 @@ public class GameController1 : MonoBehaviour
                 rewind.StoreValues(x, y, a, b, turn, "Normal", hit1.collider.name, "", pawnFirstMove, movedOrNot);
                 ChangeValues();
             }
-            if (hit.transform.GetComponent<MeshRenderer>().material.color == Color.red)
+            if (hit.transform.GetComponent<MeshRenderer>().material.color == Color.red)//Killing Movement
             {
                 GameObject.Find(chessBoardMatrix[a, b]).SetActive(false);
                 GameObject.Find(hit1.collider.name).GetComponent<BoxCollider>().enabled = false;
@@ -584,7 +591,7 @@ public class GameController1 : MonoBehaviour
                 rewind.StoreValues(x, y, a, b, turn, "Killed", hit1.collider.name, chessBoardMatrix[a, b], pawnFirstMove, movedOrNot);
                 ChangeValues();
             }
-            if(hit.transform.GetComponent<MeshRenderer>().material.color == Color.yellow)
+            if(hit.transform.GetComponent<MeshRenderer>().material.color == Color.yellow)//Castling Movement
             {
                 GameObject.Find(hit1.collider.name).GetComponent<BoxCollider>().enabled = false;
                 hit2 = hit1;
@@ -592,7 +599,7 @@ public class GameController1 : MonoBehaviour
                 movementSpeed = Vector3.Distance(hit2.transform.position, endPosition) * 2f;
                 move = true;
                 rewind.StoreValues(x, y, a, b, turn, "Castling", hit1.collider.name, "", pawnFirstMove, movedOrNot);
-                if (turn)
+                if (turn)//White King Castling
                 {
                     if (b<y)
                     {
@@ -623,7 +630,7 @@ public class GameController1 : MonoBehaviour
                         chessBoardMatrix[x, y] = "";
                     }
                 }
-                else
+                else//Black King Castling
                 {
                     if (b < y)
                     {
@@ -656,8 +663,10 @@ public class GameController1 : MonoBehaviour
                 }
             }
         }
-        //Finding the position of the selected chesspiece(hit1)
-        for (int i = 0; i < 8; i++)
+        #endregion
+        #region Opponent ChessPiece is selected/hit to Move your ChessPiece
+        //Here a,b is source position and x,y is destination position and hit variable is opponent ChessPiece
+        for (int i = 0; i < 8; i++)//Finding the position of the selected chesspiece(hit1)
         {
             for (int j = 0; j < 8; j++)
             {
@@ -670,7 +679,7 @@ public class GameController1 : MonoBehaviour
             }
         }
         brk:
-        if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Black") && turn)
+        if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Black") && turn)//White
         {
             var ob = GameObject.Find(highLightTilesMatrix[x, y]);
             if (ob.GetComponent<MeshRenderer>().material.color == Color.red)
@@ -687,7 +696,7 @@ public class GameController1 : MonoBehaviour
                 chessBoardMatrix[x, y] = name1;
             }
         }
-        if (hit.transform.gameObject.layer == LayerMask.NameToLayer("White") && !turn)
+        if (hit.transform.gameObject.layer == LayerMask.NameToLayer("White") && !turn)//Black
         {
             var ob = GameObject.Find(highLightTilesMatrix[x, y]);
             if (ob.GetComponent<MeshRenderer>().material.color == Color.red)
@@ -704,6 +713,8 @@ public class GameController1 : MonoBehaviour
                 chessBoardMatrix[x, y] = name1;
             }
         }
+        #endregion
+        //If Rook is Moved for First Time then change its movedOrNot to true
         if (hit1.collider.CompareTag("Rook"))
         {
             if (movedOrNot.ContainsKey(hit1.collider.name))
@@ -714,6 +725,7 @@ public class GameController1 : MonoBehaviour
                 }
             }
         }
+        //If King is Moved for First Time then change its movedOrNot to true
         if (hit1.collider.CompareTag("King"))
         {
             if (!movedOrNot[hit1.collider.name])
@@ -721,6 +733,6 @@ public class GameController1 : MonoBehaviour
                 movedOrNot[hit1.collider.name] = true;
             }
         }
-        moveAudio.Play();
+        moveAudio.Play();//Movement Audio Playing
     }
 }

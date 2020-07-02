@@ -3,23 +3,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//This script is called when pawn is selected
+//All the possible movements are checked and those movements are activated i.e the highlighplanes if only if the CheckOrNot returns false
+//If CheckOrNot returns true then that plane is activated
 public class PawnMovement : MonoBehaviour
 {
     public GameController1 controller;
-    public string[,] copy = new string[8,8];
+    public string[,] copy = new string[8,8];//copy of chessBoardMatrix
     public Check check;
     public GameObject blackSummon;
     public GameObject whiteSummon;
-    public GameObject[] summonPieces;
-    public Transform parent;
+    public GameObject[] summonPieces;//Prefabs of summon ChessPieces
+    public Transform parent;//Parent of ChessPieces
     string name1;
     string name2;
     int count;
-    public int xpos, ypos;
+    public int xpos, ypos;//For Summoning position
+    #region Movement Variables
     public bool move = false;
     Vector3 endposition;
     public RaycastHit hit2;
     public float movementSpeed;
+    #endregion
     public Rewind rewind;
     public GameObject enpassantTextObject;
 
@@ -38,9 +43,9 @@ public class PawnMovement : MonoBehaviour
             }
         }
         name1 = copy[x, y];
-        if (controller.turn)
+        if (controller.turn)//White's Turn
         {
-            if(copy[x-1,y]=="")
+            if(copy[x-1,y]=="")//Normal Movement plane activation
             {
                 name2 = copy[x-1, y];
                 copy[x - 1, y] = name1;
@@ -55,7 +60,7 @@ public class PawnMovement : MonoBehaviour
                 }
                 copy[x, y] = name1;
                 copy[x - 1, y] = name2;
-                if (x==6)
+                if (x==6)//First Movement Plane Activation
                 {
                     if (copy[x - 2, y] == "")
                     {
@@ -75,7 +80,7 @@ public class PawnMovement : MonoBehaviour
                     }
                 }
             }
-            if (y != 0 && copy[x - 1, y - 1].Contains("B "))
+            if (y != 0 && copy[x - 1, y - 1].Contains("B "))//Left Cross Killing Movement Plane Activation
             {
                 name2 = copy[x - 1, y - 1];
                 copy[x - 1, y - 1] = name1;
@@ -93,7 +98,7 @@ public class PawnMovement : MonoBehaviour
             }
             else
             {
-                if (x == 3 && y != 0 && copy[x, y - 1].Contains("B Pawn"))
+                if (x == 3 && y != 0 && copy[x, y - 1].Contains("B Pawn"))//Left Cross Enpassant Movement Plane Activation
                 {
                     if (controller.pawnFirstMove[copy[x, y - 1]] == 1)
                     {
@@ -115,7 +120,7 @@ public class PawnMovement : MonoBehaviour
                     }
                 }
             }
-            if (y != 7 && copy[x - 1, y + 1].Contains("B "))
+            if (y != 7 && copy[x - 1, y + 1].Contains("B "))//Right Cross Killing Movement Plane Activation
             {
                 name2 = copy[x - 1, y + 1];
                 copy[x - 1, y + 1] = name1;
@@ -133,7 +138,7 @@ public class PawnMovement : MonoBehaviour
             }
             else
             {
-                if (x == 3 && y != 7 && copy[x, y + 1].Contains("B Pawn"))
+                if (x == 3 && y != 7 && copy[x, y + 1].Contains("B Pawn"))//Right Cross Enpassant Movement Plane Activation
                 {
                     if (controller.pawnFirstMove[copy[x, y + 1]] == 1)
                     {
@@ -155,9 +160,9 @@ public class PawnMovement : MonoBehaviour
                 }
             }
         }
-        else
+        else//Black's Turn
         {
-            if (copy[x + 1, y] == "")
+            if (copy[x + 1, y] == "")//Normal Movement plane activation
             {
                 name2 = copy[x + 1, y];
                 copy[x + 1, y] = name1;
@@ -172,7 +177,7 @@ public class PawnMovement : MonoBehaviour
                 }
                 copy[x, y] = name1;
                 copy[x + 1, y] = name2;
-                if (x == 1)
+                if (x == 1)//First Movement Plane Activation
                 {
                     if (copy[x + 2, y] == "")
                     {
@@ -192,7 +197,7 @@ public class PawnMovement : MonoBehaviour
                     }
                 }
             }
-            if (y != 0 && copy[x + 1, y - 1].Contains("W "))
+            if (y != 0 && copy[x + 1, y - 1].Contains("W "))//Left Cross Killing Movement Plane Activation
             {
                 name2 = copy[x + 1, y - 1];
                 copy[x + 1, y - 1] = name1;
@@ -210,7 +215,7 @@ public class PawnMovement : MonoBehaviour
             }
             else
             {
-                if (x == 4 && y != 0 && copy[x, y - 1].Contains("W Pawn"))
+                if (x == 4 && y != 0 && copy[x, y - 1].Contains("W Pawn"))//Left Cross Enpassant Movement Plane Activation
                 {
                     if (controller.pawnFirstMove[copy[x, y - 1]] == 1)
                     {
@@ -232,7 +237,7 @@ public class PawnMovement : MonoBehaviour
                     }
                 }
             }
-            if (y != 7 && copy[x + 1, y + 1].Contains("W "))
+            if (y != 7 && copy[x + 1, y + 1].Contains("W "))//Right Cross Killing Movement Plane Activation
             {
                 name2 = copy[x + 1, y + 1];
                 copy[x + 1, y + 1] = name1;
@@ -250,7 +255,7 @@ public class PawnMovement : MonoBehaviour
             }
             else
             {
-                if (x == 4 && y != 7 && copy[x, y + 1].Contains("W Pawn"))
+                if (x == 4 && y != 7 && copy[x, y + 1].Contains("W Pawn"))//Right Cross Enpassant Movement Plane Activation
                 {
                     if (controller.pawnFirstMove[copy[x, y + 1]] == 1)
                     {
@@ -274,23 +279,27 @@ public class PawnMovement : MonoBehaviour
         }
     }
 
+    //Counts no. of activated planes.This function is called by Checkmate Script
     internal int getCount(int i, int j)
     {
         ActivatePlanes(i, j);
         return count;
     }
 
+    //Movement function to store the movement values and Invoke the Update function to start the movement For Pawn Only
     internal void MoveSelected(RaycastHit hit, RaycastHit hit1, int x, int y)
     {
         int a = 0, b = 0;
         controller.HighLightTilesPosition(hit,ref a, ref b);
         xpos = a;
         ypos = b;
+        #region HighLight Plane is Selected/hit to Move your ChessPiece
+        //Here x,y is source position and a,b is destination position and hit variable is HighLight Plane
         if (hit.transform.gameObject.layer == LayerMask.NameToLayer("HightlightPlane"))
         {
             if (hit.transform.GetComponent<MeshRenderer>().material.color == Color.green)
             {
-                if (hit1.collider.name.Contains("W "))
+                if (hit1.collider.name.Contains("W "))//White's Turn
                 {
                     hit2 = hit1;
                     endposition = hit.transform.position;
@@ -298,12 +307,11 @@ public class PawnMovement : MonoBehaviour
                     movementSpeed = Vector3.Distance(hit2.transform.position, endposition) * 2f;
                     move = true;
                     rewind.StoreValues(x, y, a, b, controller.turn, "Normal", hit1.collider.name, "",controller.pawnFirstMove, controller.movedOrNot);
-                    if (a == 4 && x == 6)
+                    if (a == 4 && x == 6)//First Movement of a Pawn(2 Spaces) 
                     {
-                        //rewind.StoreValues(x, y, a, b, controller.turn, "PawnFirstMove", hit1.collider.name, "", controller.pawnFirstMove, controller.movedOrNot);
                         controller.pawnFirstMove[hit1.collider.name] = 1;
                     }
-                    else if (a == x - 1 && (b == y - 1 || b == y + 1))
+                    else if (a == x - 1 && (b == y - 1 || b == y + 1))//Enpassant Movement 
                     {
                         GameObject.Find(controller.chessBoardMatrix[a + 1, b]).SetActive(false);
                         rewind.StoreValues(x, y, a, b, controller.turn, "Enpassant", hit1.collider.name, "", controller.pawnFirstMove, controller.movedOrNot);
@@ -312,11 +320,11 @@ public class PawnMovement : MonoBehaviour
                         enpassantTextObject.SetActive(true);
                         StartCoroutine(EnpassantTextWait());
                     }
-                    if (a == 0)
+                    if (a == 0)//If Summoning
                         rewind.StoreValues(x, y, a, b, controller.turn, "Summoning", hit1.collider.name, "", controller.pawnFirstMove, controller.movedOrNot);
                     controller.ChangeValues();
                 }
-                else if (hit1.collider.name.Contains("B "))
+                else if (hit1.collider.name.Contains("B "))//Black's Turn
                 {
                     hit2 = hit1;
                     endposition = hit.transform.position;
@@ -324,14 +332,13 @@ public class PawnMovement : MonoBehaviour
                     movementSpeed = Vector3.Distance(hit2.transform.position, endposition) * 2f;
                     move = true;
                     rewind.StoreValues(x, y, a, b, controller.turn, "Normal", hit1.collider.name, "", controller.pawnFirstMove, controller.movedOrNot);
-                    if (a == 3 && x == 1)
+                    if (a == 3 && x == 1)//First Movement of a Pawn(2 Spaces) 
                     {
-                        //rewind.StoreValues(x, y, a, b, controller.turn, "PawnFirstMove", hit1.collider.name, "", controller.pawnFirstMove, controller.movedOrNot);
                         controller.pawnFirstMove[hit1.collider.name] = 1;
                     }
                     else
                     {
-                        if (a == x + 1 && (b == y - 1 || b == y + 1))
+                        if (a == x + 1 && (b == y - 1 || b == y + 1))//Enpassant Movement 
                         {
                             GameObject.Find(controller.chessBoardMatrix[a - 1, b]).SetActive(false);
                             rewind.StoreValues(x, y, a, b, controller.turn, "Enpassant", hit1.collider.name, "", controller.pawnFirstMove, controller.movedOrNot);
@@ -341,7 +348,7 @@ public class PawnMovement : MonoBehaviour
                             StartCoroutine(EnpassantTextWait());
                         }
                     }
-                    if (a == 7)
+                    if (a == 7)//If Summoning
                         rewind.StoreValues(x, y, a, b, controller.turn, "Summoning", hit1.collider.name, "", controller.pawnFirstMove, controller.movedOrNot);
                     controller.ChangeValues();
                 }
@@ -362,7 +369,10 @@ public class PawnMovement : MonoBehaviour
                 controller.ChangeValues();
             }
         }
-        for (int i = 0; i < 8; i++)
+        #endregion
+        #region Opponent ChessPiece is selected/hit to Move your ChessPiece
+        //Here a,b is source position and x,y is destination position and hit variable is opponent ChessPiece
+        for (int i = 0; i < 8; i++)//Finding the position of the selected chesspiece(hit1)
         {
             for (int j = 0; j < 8; j++)
             {
@@ -375,7 +385,7 @@ public class PawnMovement : MonoBehaviour
             }
         }
         brk:
-        if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Black") && controller.turn)
+        if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Black") && controller.turn)//White
         {
             var ob = GameObject.Find(controller.highLightTilesMatrix[x, y]);
             if (ob.GetComponent<MeshRenderer>().material.color == Color.red)
@@ -387,7 +397,7 @@ public class PawnMovement : MonoBehaviour
                 movementSpeed = Vector3.Distance(hit2.transform.position, endposition) * 2f;
                 move = true;
                 rewind.StoreValues(a, b, x, y, controller.turn, "Killed", hit1.collider.name, hit.collider.name, controller.pawnFirstMove, controller.movedOrNot);
-                if (x == 0)
+                if (x == 0)//If Killed and also summoned
                     rewind.StoreValues(a, b, x, y, controller.turn, "Summoning", hit1.collider.name, hit.collider.name, controller.pawnFirstMove, controller.movedOrNot);
                 string name1 = controller.chessBoardMatrix[a, b];
                 controller.chessBoardMatrix[a, b] = "";
@@ -396,7 +406,7 @@ public class PawnMovement : MonoBehaviour
                 ypos = y;
             }
         }
-        if (hit.transform.gameObject.layer == LayerMask.NameToLayer("White") && !controller.turn)
+        if (hit.transform.gameObject.layer == LayerMask.NameToLayer("White") && !controller.turn)//Black
         {
             var ob = GameObject.Find(controller.highLightTilesMatrix[x, y]);
             if (ob.GetComponent<MeshRenderer>().material.color == Color.red)
@@ -408,7 +418,7 @@ public class PawnMovement : MonoBehaviour
                 movementSpeed = Vector3.Distance(hit2.transform.position, endposition) * 2f;
                 move = true;
                 rewind.StoreValues(a, b, x, y, controller.turn, "Killed", hit1.collider.name, hit.collider.name, controller.pawnFirstMove, controller.movedOrNot);
-                if (x == 7)
+                if (x == 7)//If Killed and also summoned
                     rewind.StoreValues(a, b, x, y, controller.turn, "Summoning", hit1.collider.name, hit.collider.name, controller.pawnFirstMove, controller.movedOrNot);
                 string name1 = controller.chessBoardMatrix[a, b];
                 controller.chessBoardMatrix[a, b] = "";
@@ -417,7 +427,9 @@ public class PawnMovement : MonoBehaviour
                 ypos = y;
             }
         }
-        if(controller.turn && xpos==0)
+        #endregion
+        //Checking if summon panel is to be activated or not
+        if (controller.turn && xpos==0)
         {
             controller.summoning = true;
             StartCoroutine(Wait(controller.turn));
@@ -430,13 +442,13 @@ public class PawnMovement : MonoBehaviour
         controller.moveAudio.Play();
     }
 
-    IEnumerator EnpassantTextWait()
+    IEnumerator EnpassantTextWait()//Deactivates the enpassantText after some time
     {
         yield return new WaitForSeconds(0.5f);
         enpassantTextObject.SetActive(false);
     }
 
-    IEnumerator Wait(bool turn)
+    IEnumerator Wait(bool turn)//Waits for the movement to complete and then activates the summon panel 
     {
         yield return new WaitForSeconds(0.75f);
         if(turn)
@@ -537,9 +549,9 @@ public class PawnMovement : MonoBehaviour
     }
     #endregion
 
-    private void startCoroutine()
+    private void startCoroutine()//Starts Timer if rewindDone is false else passes the turn to the opponent 
     {
-        if(!rewind.rewindDone)
+        if(!rewind.rewindDoneOnce)
         {
             controller.summoning = false;
             rewind.time = 5;
@@ -547,7 +559,7 @@ public class PawnMovement : MonoBehaviour
             rewind.displayText.color = color;
             rewind.startTimer = true;
         }
-        if(rewind.rewindDone)
+        if(rewind.rewindDoneOnce)
         {
             if (!controller.turn)
             {
@@ -557,7 +569,7 @@ public class PawnMovement : MonoBehaviour
             {
                 controller.GetComponent<GameController1>().StartCoroutine("Coroutine2");
             }
-            rewind.rewindDone = false;
+            rewind.rewindDoneOnce = false;
         }
         /*
         if (xpos == 0 && !controller.gameOver)
@@ -589,7 +601,8 @@ public class PawnMovement : MonoBehaviour
         controller.summoning = false;
     }
     */
-    private void Update()
+
+    private void Update()//Movement of the selected ChessPiece
     {
         if(move)
         {
@@ -602,14 +615,14 @@ public class PawnMovement : MonoBehaviour
                 GameObject.Find(hit2.collider.name).GetComponent<BoxCollider>().enabled = true;
                 move = false;
                 controller.chk();
-                if (!rewind.rewindDone && !controller.summoning)
+                if (!rewind.rewindDoneOnce && !controller.summoning)
                 {
                     rewind.time = 5;
                     Color color = new Color(0.0352f, 0.2823f, 0.0156f, 1f);
                     rewind.displayText.color = color;
                     rewind.startTimer = true;
                 }
-                if (rewind.rewindDone && !controller.summoning)
+                if (rewind.rewindDoneOnce && !controller.summoning)
                 {
                     if (hit2.collider.name.Contains("W "))
                     {
@@ -619,7 +632,7 @@ public class PawnMovement : MonoBehaviour
                     {
                         controller.GetComponent<GameController1>().StartCoroutine("Coroutine2");
                     }
-                    rewind.rewindDone = false;
+                    rewind.rewindDoneOnce = false;
                 }
             }
         }

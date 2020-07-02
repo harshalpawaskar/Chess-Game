@@ -20,7 +20,7 @@ public class Rewind : MonoBehaviour
     [NonSerialized] public Dictionary<string, int> copyOfPawnFirstMove = new Dictionary<string, int>();
     [NonSerialized] public Dictionary<string, bool> copyOfMovedOrNot = new Dictionary<string, bool>();
     #endregion
-    public bool startTimer = false, rewindDone = false;
+    public bool startTimer = false, rewindDoneOnce = false;
     public float time,timeToDisplay;
     public Text displayText;
     public GameObject activatedTextObject;
@@ -83,12 +83,12 @@ public class Rewind : MonoBehaviour
                 GameObject.Find(controller.highLightTilesMatrix[controller.checki, controller.checkj]).GetComponent<Transform>().localScale = new Vector3(0.585f, 0.0001f, 0.585f);
                 controller.turn = turn;
                 controller.chk();
-                rewindDone = true;
+                rewindDoneOnce = true;
                 controller.touchEnabled = true;
                 move = false;
             }
         }
-        //For Rook,if castling is done this turn then it is activated
+        //For Rook,if castling is done this turn then it is activated and Moves back the rook to its previous position
         if (castling)
         {
             if (castlingRook.transform.position != endPositionCastling)
@@ -106,7 +106,7 @@ public class Rewind : MonoBehaviour
     public void RewindGame()
     {
         //If no movement is done this turn and the rewind button is pressed
-        if (!startTimer && !rewindDone)
+        if (!startTimer && !rewindDoneOnce)
         {
             rewindStatusPanel.SetActive(true);
             rewindStatusText.text = "Rewind is Off.\nNo Movement done this turn.";
@@ -131,7 +131,7 @@ public class Rewind : MonoBehaviour
                 CastingRewind();
         }
         //If rewind is pressed after rewinding once
-        if (rewindDone)
+        if (rewindDoneOnce)
         {
             rewindStatusPanel.SetActive(true);
             rewindStatusText.text = "Rewind is Off.\nCan rewind only once each turn.";

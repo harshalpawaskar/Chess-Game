@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.43667564, g: 0.48427135, b: 0.5645232, a: 1}
+  m_IndirectSpecularColor: {r: 0.43667564, g: 0.48427147, b: 0.56452364, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2797,8 +2797,8 @@ MonoBehaviour:
   volumeOff: {fileID: 1182725192}
   moveAudio: {fileID: 1790685000}
   controller: {fileID: 1790684990}
-  onButton: {fileID: 1299206898}
-  OffButton: {fileID: 1116351966}
+  helperOnButton: {fileID: 1299206898}
+  helperOffButton: {fileID: 1116351966}
 --- !u!4 &284501018
 Transform:
   m_ObjectHideFlags: 0
@@ -6922,7 +6922,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4492593383673758, guid: 1b1f559bfdac84ab388545154d81dcf8, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.609375
+      value: -1.609375
       objectReference: {fileID: 0}
     - target: {fileID: 4492593383673758, guid: 1b1f559bfdac84ab388545154d81dcf8, type: 3}
       propertyPath: m_LocalPosition.y
@@ -18615,7 +18615,7 @@ PrefabInstance:
     - target: {fileID: 6455532567354140026, guid: 8a7dfbdd0db749b44ae5238c6face815,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.609375
+      value: 1.609375
       objectReference: {fileID: 0}
     - target: {fileID: 6455532567354140026, guid: 8a7dfbdd0db749b44ae5238c6face815,
         type: 3}

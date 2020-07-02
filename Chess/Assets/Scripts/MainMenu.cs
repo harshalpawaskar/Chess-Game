@@ -10,7 +10,7 @@ public class MainMenu : MonoBehaviour
 
     public void Awake()
     {
-        if(PlayerPrefs.GetString("Volume")=="")
+        if(PlayerPrefs.GetString("Volume")=="")//When launcing the game for the first Time
         {
             PlayerPrefs.SetString("Volume", "ON");
             Color color = buttons[0].GetComponent<UnityEngine.UI.Image>().color;
@@ -38,7 +38,7 @@ public class MainMenu : MonoBehaviour
             color.a = offColor;
             buttons[0].GetComponent<UnityEngine.UI.Image>().color = color;
         }
-        if(PlayerPrefs.GetString("Helper")=="")
+        if(PlayerPrefs.GetString("Helper")=="")//When launcing the game for the first Time
         {
             PlayerPrefs.SetString("Helper", "ON");
             Color color = buttons[2].GetComponent<UnityEngine.UI.Image>().color;
@@ -68,6 +68,7 @@ public class MainMenu : MonoBehaviour
         }
     }
 
+    //Turns ON the Volume.Called onClick()
     public void VolumeON()
     {
         Color color = buttons[0].GetComponent<UnityEngine.UI.Image>().color;
@@ -78,6 +79,8 @@ public class MainMenu : MonoBehaviour
         buttons[1].GetComponent<UnityEngine.UI.Image>().color = color;
         PlayerPrefs.SetString("Volume", "ON");
     }
+
+    //Turns OFF the Volume.Called onClick()
     public void VolumeOFF()
     {
         Color color = buttons[1].GetComponent<UnityEngine.UI.Image>().color;
@@ -89,6 +92,7 @@ public class MainMenu : MonoBehaviour
         PlayerPrefs.SetString("Volume", "OFF");
     }
 
+    //Turns ON the Helper.Called onClick()
     public void HelperON()
     {
         Color color = buttons[2].GetComponent<UnityEngine.UI.Image>().color;
@@ -99,6 +103,8 @@ public class MainMenu : MonoBehaviour
         buttons[3].GetComponent<UnityEngine.UI.Image>().color = color;
         PlayerPrefs.SetString("Helper", "ON");
     }
+
+    //Turns OFF the Helper.Called onClick()
     public void HelperOFF()
     {
         Color color = buttons[3].GetComponent<UnityEngine.UI.Image>().color;
@@ -110,11 +116,13 @@ public class MainMenu : MonoBehaviour
         PlayerPrefs.SetString("Helper", "OFF");
     }
 
+    //Go to the main game
     public void Play()
     {
         SceneManager.LoadScene(1);
     }
 
+    //Close the Game
     public void Quit()
     {
         Application.Quit();

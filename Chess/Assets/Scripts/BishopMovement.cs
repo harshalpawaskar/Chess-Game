@@ -3,10 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//This script is called when Bishop is selected
+//All the possible movements are checked and those movements are activated i.e the highlighplanes if only if the CheckOrNot returns false
+//If CheckOrNot returns true then that plane is activated
 public class BishopMovement : MonoBehaviour
 {
     public GameController1 controller;
-    public string[,] copy = new string[8, 8];
+    public string[,] copy = new string[8, 8];//copy of chessBoardMatrix
     public Check check;
     string name1;
     string name2;
@@ -28,10 +31,10 @@ public class BishopMovement : MonoBehaviour
             }
         }
         name1 = copy[x, y];
-        //Cross Right Up
+        #region Cross Right Up
         a = x - 1;
         b = y + 1;
-        while(a>=0 && b<=7)
+        while(a>=0 && b<=7)//Keeps on checking for possible movements until it encounters an enemy gamepiece or until the condition becomes false 
         {
             if(copy[a, b] == "")
             {
@@ -90,10 +93,11 @@ public class BishopMovement : MonoBehaviour
             a--;
             b++;
         }
-        //Cross Left Up
+        #endregion
+        #region Cross Left Up
         a = x - 1;
         b = y - 1;
-        while (a >= 0 && b >=0)
+        while (a >= 0 && b >=0)//Keeps on checking for possible movements until it encounters an enemy gamepiece or until the condition becomes false
         {
             if (copy[a, b] == "")
             {
@@ -152,10 +156,11 @@ public class BishopMovement : MonoBehaviour
             a--;
             b--;
         }
-        //Cross Right Bottom
+        #endregion
+        #region Cross Right Bottom
         a = x + 1;
         b = y + 1;
-        while (a <= 7 && b <= 7)
+        while (a <= 7 && b <= 7)//Keeps on checking for possible movements until it encounters an enemy gamepiece or until the condition becomes false
         {
             if (copy[a, b] == "")
             {
@@ -214,10 +219,11 @@ public class BishopMovement : MonoBehaviour
             a++;
             b++;
         }
-        //Cross Left Bottom
+        #endregion
+        #region Cross Left Bottom
         a = x + 1;
         b = y - 1;
-        while (a <= 7 && b >= 0)
+        while (a <= 7 && b >= 0)//Keeps on checking for possible movements until it encounters an enemy gamepiece or until the condition becomes false
         {
             if (copy[a, b] == "")
             {
@@ -276,7 +282,11 @@ public class BishopMovement : MonoBehaviour
             a++;
             b--;
         }
+        #endregion
     }
+
+
+    //Counts no. of activated planes.This function is called by Checkmate Script
     internal int getCount(int i, int j)
     {
         ActivatePlanes(i, j);

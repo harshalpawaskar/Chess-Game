@@ -3,14 +3,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//This script is called when King is selected
+//All the possible movements are checked and those movements are activated i.e the highlighplanes if only if the CheckOrNot returns false
+//If CheckOrNot returns true then that plane is activated
 public class KingMovement : MonoBehaviour
 {
     public GameController1 controller;
-    public string[,] copy = new string[8, 8];
+    public string[,] copy = new string[8, 8];//copy of chessBoardMatrix
     public Check check;
     string name1;
     string name2;
     int count;
+
     public void ActivatePlanes(int x, int y)
     {
         count = 0;
@@ -27,6 +31,7 @@ public class KingMovement : MonoBehaviour
             }
         }
         name1 = copy[x, y];
+        #region UP-LEFT,UP,UP-RIGHT
         a = x - 1;
         b = y - 1;
         if(a>=0)
@@ -87,6 +92,8 @@ public class KingMovement : MonoBehaviour
                 b++;
             }
         }
+        #endregion
+        #region DOWN-LEFT,DOWN,DOWN-RIGHT
         a = x + 1;
         b = y - 1;
         if (a<=7)
@@ -147,6 +154,8 @@ public class KingMovement : MonoBehaviour
                 b++;
             }
         }
+        #endregion
+        #region LEFT
         a = x;
         b = y - 1;
         if (b>=0)
@@ -200,6 +209,8 @@ public class KingMovement : MonoBehaviour
                 copy[a, b] = name2;
             }
         }
+        #endregion
+        #region RIGHT
         a = x;
         b = y + 1;
         if (b <= 7)
@@ -253,7 +264,9 @@ public class KingMovement : MonoBehaviour
                 copy[a, b] = name2;
             }
         }
-        if(controller.turn && !controller.movedOrNot["W King"])
+        #endregion
+        #region White King Castling
+        if (controller.turn && !controller.movedOrNot["W King"])
         {
             if(copy[7,1]=="" && copy[7,2]=="" && copy[7,3]=="" && copy[7,0].Contains("W Rook") && controller.movedOrNot.ContainsKey(copy[7, 0]))
             {
@@ -300,7 +313,9 @@ public class KingMovement : MonoBehaviour
                 }
             }
         }
-        if(!controller.turn && !controller.movedOrNot["B King"])
+        #endregion
+        #region Black King Castling
+        if (!controller.turn && !controller.movedOrNot["B King"])
         {
             if (copy[0, 1] == "" && copy[0, 2] == "" && copy[0, 3] == "" && copy[0, 0].Contains("B Rook") && controller.movedOrNot.ContainsKey(copy[0, 0]))
             {
@@ -347,8 +362,10 @@ public class KingMovement : MonoBehaviour
                 }
             }
         }
+        #endregion
     }
 
+    //Counts no. of activated planes.This function is called by Checkmate Script
     internal int getCount(int i, int j)
     {
         ActivatePlanes(i, j);

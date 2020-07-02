@@ -3,14 +3,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//This script is called when Rook is selected
+//All the possible movements are checked and those movements are activated i.e the highlighplanes if only if the CheckOrNot returns false
+//If CheckOrNot returns true then that plane is activated
+
 public class RookMovement : MonoBehaviour
 {
     public GameController1 controller;
-    public string[,] copy = new string[8, 8];
+    public string[,] copy = new string[8, 8];//copy of chessBoardMatrix
     public Check check;
     string name1;
     string name2;
     int count;
+
     public void ActivatePlanes(int x, int y)
     {
         count = 0;
@@ -27,10 +32,10 @@ public class RookMovement : MonoBehaviour
             }
         }
         name1 = copy[x, y];
-        //UP
+        #region UP
         a = x - 1;
         b = y;
-        while (a >= 0)
+        while (a >= 0)//Keeps on checking for possible movements until it encounters an enemy gamepiece or until the condition becomes false
         {
             if (copy[a, b] == "")
             {
@@ -88,10 +93,11 @@ public class RookMovement : MonoBehaviour
             }
             a--;
         }
-        //DOWN
+        #endregion
+        #region DOWN
         a = x + 1;
         b = y;
-        while (a <= 7)
+        while (a <= 7)//Keeps on checking for possible movements until it encounters an enemy gamepiece or until the condition becomes false
         {
             if (copy[a, b] == "")
             {
@@ -149,10 +155,11 @@ public class RookMovement : MonoBehaviour
             }
             a++;
         }
-        //Right
+        #endregion
+        #region Right
         a = x;
         b = y + 1;
-        while (b <= 7)
+        while (b <= 7)//Keeps on checking for possible movements until it encounters an enemy gamepiece or until the condition becomes false
         {
             if (copy[a, b] == "")
             {
@@ -210,10 +217,11 @@ public class RookMovement : MonoBehaviour
             }
             b++;
         }
-        //LEFT
+        #endregion
+        #region LEFT
         a = x;
         b = y - 1;
-        while (b >= 0)
+        while (b >= 0)//Keeps on checking for possible movements until it encounters an enemy gamepiece or until the condition becomes false
         {
             if (copy[a, b] == "")
             {
@@ -271,8 +279,10 @@ public class RookMovement : MonoBehaviour
             }
             b--;
         }
+        #endregion
     }
 
+    //Counts no. of activated planes.This function is called by Checkmate Script
     internal int getCount(int i, int j)
     {
         ActivatePlanes(i, j);
